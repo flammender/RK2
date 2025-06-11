@@ -1,0 +1,78 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential fakeroot devscripts qtbase5-dev
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -S ${{github.workspace}} -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build project
+      run: cmake --build ${{github.workspace}}/build --config Release
+
+    - name: Run tests
+      working-directory: ${{github.workspace}}/build
+      run: ctest
+
+    - name: Create Debian package (using CPack)
+      run: |
+        cd ${{github.workspace}}/build
+        # Запускаем CPack для создания пакета, используя конфигурацию из CMakeLists.txt
+        cpack -V # -V для подробного вывода, полезно для отладки
+
+    - name: Find generated package
+      id: find_package
+      run: |
+        PACKAGE_NAME=$(find ${{github.workspace}}/build -name "*.deb" | head -n 1)
+        echo "Found package: $PACKAGE_NAME"
+        echo "package_path=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+
+    - name: Upload Debian package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: debian-package
+        path: ${{steps.find_package.outputs.package_path}}
+
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download Debian package artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: debian-package
+        path: ./artifacts
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ./artifacts/*.deb
+        tag_name: v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
+        body: |
+          Automatic release of Command Pattern Application.
+          Includes:
+          - CommandPatternApp (executable)
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
