@@ -13,7 +13,5 @@ add_library(CommandPatternLib STATIC
     remotecontrol.h
 )
 
-set_target_properties(CommandPatternLib PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
+
 )

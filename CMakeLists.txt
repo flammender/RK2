@@ -18,10 +18,6 @@ set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "${CPACK_PACKAGE_HOMEPAGE_URL}")
 set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
-install(TARGETS CommandPatternApp
-        DESTINATION bin
-        COMPONENT Application)
-
 add_subdirectory(command_pattern)
 add_subdirectory(src)
 add_subdirectory(examples/fan_control)
