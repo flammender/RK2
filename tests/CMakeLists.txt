@@ -1,9 +1,4 @@
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
-)
-FetchContent_MakeAvailable(googletest)
+include_directories(third-party/gtest)
 
 target_include_directories(gtest_main PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../command_pattern
