@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 
 project(CommandPatternProject)
 
-include(CPack)
-
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A C++ project demonstrating the Command Pattern.")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/flammender/RK2")
@@ -37,4 +35,4 @@ if(BUILD_TESTS)
   add_test(NAME RemoteControlTest COMMAND RemoteControlTests)
 endif()
 
-set(CPACK_GENERATOR "DEB")
+include(CPack)
