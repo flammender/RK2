@@ -15,6 +15,7 @@ add_library(command_pattern STATIC
     remotecontrol.h
 )
 
+target_link_libraries(command_pattern Qt5::Core)
 set_target_properties(command_pattern PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
