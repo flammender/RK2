@@ -19,7 +19,7 @@ add_subdirectory(command_pattern)
 add_subdirectory(src)
 add_subdirectory(examples/fan_control)
 enable_testing()
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 if(BUILD_TESTS)
   enable_testing()
