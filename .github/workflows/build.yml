@@ -48,31 +48,3 @@ jobs:
       with:
         name: debian-package
         path: ${{steps.find_package.outputs.package_path}}
-
-  release:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Download Debian package artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: debian-package
-        path: artifacts
-
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: ./artifacts/*.deb
-        tag_name: v${{ github.run_number }}
-        name: Release v${{ github.run_number }}
-        body: |
-          Automatic release of Command Pattern Application.
-          Includes:
-          - CommandPatternApp (executable)
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
