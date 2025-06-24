@@ -36,6 +36,3 @@ if(BUILD_TESTS)
   add_test(NAME LightOffCommandTest COMMAND LightOffCommandTests)
   add_test(NAME RemoteControlTest COMMAND RemoteControlTests)
 endif()
-
-include(CPackConfig.cmake)
-include(CPack)
