@@ -1,5 +1,7 @@
 project(command_pattern)
 
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
 add_library(command_pattern STATIC
     command.cpp
     command.h
