@@ -1,5 +1,4 @@
 project(command_pattern)
-target_include_directories(command_pattern PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(command_pattern STATIC
     command.cpp
@@ -18,3 +17,5 @@ set_target_properties(command_pattern PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
+
+target_include_directories(command_pattern PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
