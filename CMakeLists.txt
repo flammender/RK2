@@ -2,12 +2,14 @@ cmake_minimum_required(VERSION 3.10)
 
 project(CommandPatternProject)
 
-set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_VERSION "1.0.0.0")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A C++ project demonstrating the Command Pattern.")
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/flammender/RK2")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
-
-set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_CONTACT "flammender@hotmail.com") 
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libstdc++5, libqt5core5a, libqt5widgets5") 
 
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "${CPACK_PACKAGE_HOMEPAGE_URL}")
 set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
@@ -34,5 +36,3 @@ if(BUILD_TESTS)
   add_test(NAME LightOffCommandTest COMMAND LightOffCommandTests)
   add_test(NAME RemoteControlTest COMMAND RemoteControlTests)
 endif()
-
-include(CPack)
