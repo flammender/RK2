@@ -19,7 +19,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake build-essential fakeroot devscripts qtbase5-dev
-        # Клонируем googletest в поддиректорию, которую CMake сможет найти
         git clone https://github.com/google/googletest.git ${{github.workspace}}/third-party/gtest
 
     - name: Configure CMake
@@ -35,30 +34,20 @@ jobs:
     - name: Create Debian package (using CPack)
       run: |
         cd ${{github.workspace}}/build
-        cpack -V # Флаг -V (verbose) полезен для отладки, если CPack не работает
-      # Добавляем условие, чтобы этот шаг не проваливал весь workflow,
-      # если CPack не найдёт конфигурацию или не сможет создать пакет,
-      # хотя лучше убедиться, что CPack работает корректно.
-      # continue-on-error: true # Закомментировано, так как лучше, если шаг CPack провалится, если что-то пошло не так.
+        cpack -V
 
     - name: Find and Validate generated package
       id: find_package
       run: |
-        # Используем realpath --relative-to для получения пути относительно корня репозитория
-        # или просто сохраняем абсолютный путь, как у вас было.
-        # Убедимся, что find находит файл
-        PACKAGE_NAME=$(find ${{github.workspace}}/build -name "*.deb" -print -quit) # -print -quit найдет первый и сразу остановится
+        PACKAGE_NAME=$(find ${{github.workspace}}/build -name "*.deb" -print -quit)
         
         if [ -z "$PACKAGE_NAME" ]; then
           echo "Error: No .deb package found in ${{github.workspace}}/build. CPack might have failed or created it elsewhere."
-          exit 1 # Выходим с ошибкой, если пакет не найден
+          exit 1
         else
           echo "Found package: $PACKAGE_NAME"
-          # Сохраняем абсолютный путь, как у вас
           echo "package_path=$PACKAGE_NAME" >> $GITHUB_OUTPUT
         fi
-      # Зависимость от успешного выполнения предыдущего шага, чтобы не искать пакет, если CPack провалился
-      # Это уже подразумевается, если не указано continue-on-error
 
     - name: Upload Debian package artifact
       uses: actions/upload-artifact@v4
@@ -69,9 +58,7 @@ jobs:
   ---
 
   release:
-    # Запуск job release только после успешного завершения build job
     needs: build
-    # Условие для запуска job release только на пуши в ветку 'main'
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
@@ -80,17 +67,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: debian-package
-        # Указываем директорию, куда будет загружен артефакт.
-        # Например, все скачанные артефакты будут в ./artifacts/debian-package/
-        path: ./artifacts/debian-package 
+        path: ./artifacts/debian-package
 
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
       with:
-        # Указываем путь к файлу .deb внутри скачанного артефакта.
-        # softprops/action-gh-release ожидает, что files - это glob-паттерн,
-        # поэтому *.deb подойдет для директории artifacts/debian-package.
         files: ./artifacts/debian-package/*.deb
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
