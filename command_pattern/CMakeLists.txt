@@ -1,6 +1,7 @@
-target_include_directories(CommandPatternLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+project(command_pattern)
+target_include_directories(command_pattern PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(CommandPatternLib STATIC
+add_library(command_pattern STATIC
     command.cpp
     command.h
     light.cpp
@@ -13,7 +14,7 @@ add_library(CommandPatternLib STATIC
     remotecontrol.h
 )
 
-set_target_properties(CommandPatternLib PROPERTIES
+set_target_properties(command_pattern PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
