@@ -6,6 +6,8 @@ add_executable(LightOnCommandTests test_lightoncommand.cpp)
 add_executable(LightOffCommandTests test_lightoffcommand.cpp)
 add_executable(RemoteControlTests test_remotecontrol.cpp)
 
+find_package(GTest CONFIG REQUIRED)
+
 target_link_libraries(LightTests gtest_main command_pattern)
 target_link_libraries(CommandTests gtest_main command_pattern)
 target_link_libraries(LightOnCommandTests gtest_main command_pattern)
