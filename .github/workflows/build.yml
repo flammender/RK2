@@ -24,7 +24,7 @@ jobs:
     - name: Configure CMake
       run: |
         export CMAKE_PREFIX_PATH="/usr/lib/x86_64-linux-gnu/cmake/Qt5:$CMAKE_PREFIX_PATH"
-        cmake -B ${{github.workspace}}/build -S ${{github.workspace}}-DCMAKE_BUILD_TYPE=Release
+        cmake -B ${{github.workspace}}/build -S ${{github.workspace}} -DCMAKE_BUILD_TYPE=Release
 
     - name: Build project
       run: cmake --build ${{github.workspace}}/build --config Release
